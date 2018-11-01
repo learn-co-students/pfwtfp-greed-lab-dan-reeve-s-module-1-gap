@@ -2,8 +2,10 @@ class Message
 
 def self.welcome
   puts `clear`
-  puts "Welcome to Greed!"
-  puts ""
+  puts "Welcome to"
+end
+
+def self.number_of_players
   puts "Please enter the number of players (2-6):"
   puts ""
   print "Choice: "
@@ -66,7 +68,7 @@ def self.select_reroll_dice(dice_array)
   print "Choice: "
 end
 
-def self.zero_points
+def self.greed
 
 puts "   _____ _____ _____ _____ ____  "
 puts "  |   __| __  |   __|   __|    \\"

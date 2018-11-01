@@ -2,16 +2,61 @@
 
 ## Learning Goals
 
--SWBAT 1
--SWBAT 2
+- Apply concepts learned about `Hash`es and `Array`es
+- Create an object oriented program
+- Design interactive command line prompts
+- Construct game logic using conditionals
 
 ## Introduction
 
 In some of our previous lessons, we worked on building the basics of a dice
 throwing game. Now, it is time to put that code to use and implement a fully
-functioning command line game, [Greed].
+functioning command line game, [Greed]. Greed is a game where players compete to
+reach 10000 points. Each turn, players roll a set of six dice for the chance to
+collect points and must choose between multiple options: play it safe or risk
+everything and potentially win big!
 
-You are tasked with building the game logic using Ruby classes
+In this lab, you are tasked with building the game logic for Greed using object
+oriented Ruby. You will need to apply many concepts discussed in previous
+lessons, including `Array` and `Hash` creation, conditionals and loops.
+
+## Instructions
+
+Greed involves players taking turns and making choices, and to convert the game
+to a command line interface means lots of reoccurring messages to display. The
+focus of this lab is to build the game logic, so all necessary messages for the
+command line are already provided for you in `lib/message.rb`.
+
+Read the rules of Greed below to familiarize yourself. There are many ways to
+write a working solution, so for this lab, the tests will be mainly checking for
+correct _behavior_. So, for example, when a game is started, you will need to use the correct combination of messages to display the following:
+
+```sh
+Welcome to
+   _____ _____ _____ _____ ____  
+  |   __| __  |   __|   __|    \
+  |  |  |    -|   __|   __|  |  |
+  |_____|__|__|_____|_____|____/
+
+Please enter the number of players (2-6):
+
+Choice:
+```
+
+The name and structure of the method that calls the messages in correct order
+is up to you.
+
+The one exception to this is that you _must_ have an instance method,
+`calculate_points(dice_array)`. This method takes in any array of integers
+of any length and returns the correct total point value, based on the rules
+of Greed explained below.
+
+A game of greed should be started by calling `Greed.new()`. If you would like to
+play and test as you work, run `ruby bin/start.rb` to start a new game.
+
+Run `learn` as you work through your logic to see your progress. When you've
+passed all tests, you should have a fully working game, able to handle the
+various decisions involved in the game.
 
 ## Rules of Greed
 
@@ -70,6 +115,14 @@ one of three things:
 
 ## Conclusion
 
+If you've passed all the tests, congratulations! You've just developed a fully
+functional game!
+
 ## Resources
 
+- [Arrays]
+- [Hashes]
+
+[hashes]: https://ruby-doc.org/core-2.5.1/Hash.html
+[arrays]: https://ruby-doc.org/core-2.5.1/Array.html
 [greed]: http://thehobbyts.com/greed-dice-game-rules/

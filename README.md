@@ -27,9 +27,10 @@ to a command line interface means lots of reoccurring messages to display. The
 focus of this lab is to build the game logic, so all necessary messages for the
 command line are already provided for you in `lib/message.rb`.
 
-Read the rules of Greed below to familiarize yourself. There are many ways to
-write a working solution, so for this lab, the tests will be mainly checking for
-correct _behavior_. So, for example, when a game is started, you will need to use the correct combination of messages to display the following:
+Read the rules of Greed in the next section to familiarize yourself. There are
+many ways to write a working solution, so for this lab, the tests will be mainly
+checking for correct _behavior_. So, for example, when a game is started, you
+will need to use the correct combination of messages to display the following:
 
 ```sh
 Welcome to
@@ -46,10 +47,13 @@ Choice:
 The name and structure of the method that calls the messages in correct order
 is up to you.
 
-The one exception to this is that you _must_ have an instance method,
-`calculate_points(dice_array)`. This method takes in any array of integers
-of any length and returns the correct total point value, based on the rules
-of Greed explained below.
+The one exception to this is that you must include a method,
+`calculate_points(dice_array)`, in your Greed class. This method takes in any
+array of integers of any length and returns the correct total point value, based
+on the rules of Greed explained below.
+
+The `Player` class is optional, but it is recommended that you use it
+to keep track of individual player scores.
 
 A game of greed should be started by calling `Greed.new()`. If you would like to
 play and test as you work, run `ruby bin/start.rb` to start a new game.

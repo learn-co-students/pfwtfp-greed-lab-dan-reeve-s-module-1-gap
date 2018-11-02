@@ -2,4 +2,6 @@ require_relative '../lib/greed.rb'
 require_relative '../lib/player.rb'
 
 
-Greed.new()
+greed = Greed.new()
+
+greed.start_game

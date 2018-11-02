@@ -2,42 +2,42 @@ require 'pry'
 require_relative './message.rb'
 
 class Greed
+  attr_accessor :players, :player_count
 
-  def opening_prompt
-    loop do
-      Message.welcome
-      Message.greed
-      Message.number_of_players
-      player_count = get_number_of_players
-      return player_count if (1..6).include? player_count
-      Message.invalid_entry
-    end
+  def initialize
+    @players = []
   end
 
   def start_game
-    @player_count = opening_prompt
-    @players = []
-    @player_count.times do |i|
-      @players << Player.new("Player #{i+1}")
+    Message.welcome
+    Message.greed
+
+    loop do
+      Message.number_of_players
+      self.player_count = get_input
+      break if (2..6).include? self.player_count
+      Message.invalid_entry
+    end
+
+    self.player_count.times do |i|
+      self.players << Player.new("Player #{i+1}")
     end
 
     loop do
       @players.each_with_index {|player|
         turn_over = false
         while turn_over == false do
-          Message.current_scores(@players)
-          Message.new_roll(player)
           turn_over = take_turn(player)
           exit if winner?
         end
       }
     end
 
-    binding.pry
-
   end
 
   def take_turn(player)
+    Message.current_scores(@players)
+    Message.new_roll(player)
     saved_dice_array = []
     roll(player, saved_dice_array)
   end
@@ -51,7 +51,7 @@ class Greed
       Message.greed
       Message.roll_results(player, dice_array, points)
       Message.end_turn(player, points)
-      press_enter_for_next_turn
+      get_input
       return true
     else
       loop do
@@ -65,13 +65,13 @@ class Greed
         Message.roll_results(player, dice_array, points)
         Message.roll_options(points, existing_points)
 
-        choice = get_turn_decision
+        choice = get_input
 
         case choice
         when 1
           player.add_to_score(points+existing_points)
           Message.end_turn(player, points+existing_points)
-          press_enter_for_next_turn
+          get_input
           return true
         when 2
           Message.roll_again
@@ -84,7 +84,9 @@ class Greed
             Message.current_scores(@players)
             Message.saved_dice(new_dice_array, calculate_points(new_dice_array))
             Message.select_reroll_dice(dice_array)
-            choice = get_die_decision
+
+            choice = get_input
+
             if (1..dice_array.length).include? choice
               new_dice_array.push(dice_array.slice!(choice-1, 1).first)
             else
@@ -150,33 +152,20 @@ class Greed
   end
 
   def winner?
-    @players.find {|player| player.score > 10000}
+    !!@players.find {|player| player.score >= 10000}
   end
 
 
   def roll_dice(number)
-    Array.new(number).map {
-      roll_die
-    }
+    Array.new(number) { roll_die }
   end
 
   def roll_die
     rand(6)+1
   end
 
-  def get_number_of_players
+  def get_input
     gets.chomp.strip.to_i
   end
 
-  def get_turn_decision
-    gets.chomp.strip.to_i
-  end
-
-  def get_die_decision
-    gets.chomp.strip.to_i
-  end
-
-  def press_enter_for_next_turn
-    gets
-  end
 end

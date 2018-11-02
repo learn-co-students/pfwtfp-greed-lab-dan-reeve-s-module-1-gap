@@ -11,7 +11,10 @@ class Greed
   def start_game
     Message.welcome
     Message.greed
+    setup_game
+  end
 
+  def setup_game
     loop do
       Message.number_of_players
       self.player_count = get_input
@@ -22,7 +25,10 @@ class Greed
     self.player_count.times do |i|
       self.players << Player.new("Player #{i+1}")
     end
+    play_game
+  end
 
+  def play_game
     loop do
       @players.each_with_index {|player|
         turn_over = false
@@ -32,8 +38,8 @@ class Greed
         end
       }
     end
-
   end
+
 
   def take_turn(player)
     Message.current_scores(@players)
@@ -69,7 +75,7 @@ class Greed
 
         case choice
         when 1
-          player.add_to_score(points+existing_points)
+          player.score += points+existing_points
           Message.end_turn(player, points+existing_points)
           get_input
           return true

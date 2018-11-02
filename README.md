@@ -1,4 +1,4 @@
-# Title
+# Greed
 
 ## Learning Goals
 
@@ -8,6 +8,14 @@
 - Construct game logic using conditionals
 
 ## Introduction
+
+```sh
+Welcome to
+   _____ _____ _____ _____ ____  
+  |   __| __  |   __|   __|    \
+  |  |  |    -|   __|   __|  |  |
+  |_____|__|__|_____|_____|____/
+```
 
 In some of our previous lessons, we worked on building the basics of a dice
 throwing game. Now, it is time to put that code to use and implement a fully
@@ -28,24 +36,8 @@ focus of this lab is to build the game logic, so all necessary messages for the
 command line are already provided for you in `lib/message.rb`.
 
 Read the rules of Greed in the next section to familiarize yourself. There are
-many ways to write a working solution, so for this lab, the tests will be mainly
-checking for correct _behavior_. So, for example, when a game is started, you
-will need to use the correct combination of messages to display the following:
-
-```sh
-Welcome to
-   _____ _____ _____ _____ ____  
-  |   __| __  |   __|   __|    \
-  |  |  |    -|   __|   __|  |  |
-  |_____|__|__|_____|_____|____/
-
-Please enter the number of players (2-6):
-
-Choice:
-```
-
-The name and structure of the method that calls the messages in correct order
-is up to you.
+many ways to write a working solution, but for testing purposes, functionality
+should be separated into the following methods:
 
 The one exception to this is that you must include a method,
 `calculate_points(dice_array)`, in your Greed class. This method takes in any

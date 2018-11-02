@@ -5,15 +5,6 @@ require_relative '../lib/message.rb'
 require_relative '../lib/greed.rb'
 require_relative '../lib/player.rb'
 
-def capture_stdout(&blk)
-  old = $stdout
-  $stdout = fake = StringIO.new
-  blk.call
-  fake.string
-ensure
-  $stdout = old
-end
-
 describe 'Player' do
   describe '.new(player_name)' do
     it "creates a new instance of Player" do
@@ -121,9 +112,16 @@ describe 'Greed' do
       expect(greed).to respond_to(:start_game)
     end
 
-    it "populates the @players instance variable" do
-      allow(greed).to receive(:opening_prompt) { 2 }
-      expect(greed.start_game)
+    it "calls `setup_game`" do
+      Object.any_instance.stub(puts: "")
+      Object.any_instance.stub(print: "")
+      greed = Greed.new()
+      allow(greed).to receive(:get_input) { "2" }
+      allow(greed).to receive(:setup_game) { nil }
+
+      expect(greed).to receive(:setup_game)
+      greed.start_game
+
     end
   end
 

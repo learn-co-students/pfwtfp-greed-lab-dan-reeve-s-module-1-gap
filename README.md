@@ -52,8 +52,7 @@ The one exception to this is that you must include a method,
 array of integers of any length and returns the correct total point value, based
 on the rules of Greed explained below.
 
-The `Player` class is optional, but it is recommended that you use it
-to keep track of individual player scores.
+The `Player` class should be used to keep track of individual player scores.
 
 A game of greed should be started by calling `Greed.new()`. If you would like to
 play and test as you work, run `ruby bin/start.rb` to start a new game.
@@ -61,6 +60,10 @@ play and test as you work, run `ruby bin/start.rb` to start a new game.
 Run `learn` as you work through your logic to see your progress. When you've
 passed all tests, you should have a fully working game, able to handle the
 various decisions involved in the game.
+
+**Note:** Since you'll be dealing with loops and conditionals, tests will
+automatically time out after 5 seconds if stuck in an infinite loop while
+testing your solution.
 
 ## Rules of Greed
 

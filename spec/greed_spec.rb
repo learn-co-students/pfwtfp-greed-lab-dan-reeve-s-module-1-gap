@@ -107,21 +107,72 @@ describe 'Greed' do
   end
 
   describe 'start_game' do
+    greed = Greed.new()
+
     it "exists" do
-      greed = Greed.new()
       expect(greed).to respond_to(:start_game)
     end
 
+    it "calls `Message.welcome`" do
+      allow(greed).to receive(:get_input) { "2" }
+      allow(greed).to receive(:setup_game) { nil }
+
+      expect(Message).to receive(:welcome)
+      greed.start_game
+    end
+
+    it "calls `Message.greed`" do
+      allow(greed).to receive(:get_input) { "2" }
+      allow(greed).to receive(:setup_game) { nil }
+
+      expect(Message).to receive(:greed)
+      greed.start_game
+    end
+
     it "calls `setup_game`" do
-      Object.any_instance.stub(puts: "")
-      Object.any_instance.stub(print: "")
-      greed = Greed.new()
+
       allow(greed).to receive(:get_input) { "2" }
       allow(greed).to receive(:setup_game) { nil }
 
       expect(greed).to receive(:setup_game)
       greed.start_game
+    end
+  end
 
+  describe 'setup_game' do
+    greed = Greed.new()
+
+    it "exists" do
+      expect(greed).to respond_to(:setup_game)
+    end
+
+    it "calls `Message.number_of_players`" do
+      allow(greed).to receive(:get_input) { "2" }
+      allow(greed).to receive(:play_game) { nil }
+      greed.instance_variable_set(@players, [Player.new("Steve"), Player.new("Martin")])
+
+      expect(Message).to receive(:number_of_players)
+      
+      greed.setup_game
+    end
+
+    it "calls `play_game`" do
+      allow(greed).to receive(:get_input) { "2" }
+      allow(greed).to receive(:play_game) { nil }
+      greed.instance_variable_set(@players, [Player.new("Steve"), Player.new("Martin")])
+      expect(greed).to receive(:play_game)
+      expect(Message).to receive(:welcome)
+      expect(Message).to receive(:greed)
+      greed.setup_game
+    end
+    it "calls `play_game`" do
+      allow(greed).to receive(:get_input) { "2" }
+      allow(greed).to receive(:play_game) { nil }
+      greed.instance_variable_set(@players, [Player.new("Steve"), Player.new("Martin")])
+      expect(greed).to receive(:play_game)
+      expect(Message).to receive(:welcome)
+      expect(Message).to receive(:greed)
+      greed.setup_game
     end
   end
 

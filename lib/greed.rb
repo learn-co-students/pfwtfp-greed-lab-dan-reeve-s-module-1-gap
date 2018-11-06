@@ -21,6 +21,7 @@ class Greed
 
     Message.number_of_players
     self.player_count = get_input
+
     if (2..6).include? self.player_count
 
       self.player_count.times do |i|
@@ -42,9 +43,8 @@ class Greed
       take_turn
       return if winner?
     }
-    winner = self.players.sort {|player| player.score}.first
-    Message.winner(winner)
     play_game
+
   end
 
 
@@ -157,10 +157,14 @@ class Greed
         end
       end
     }
+
     if dice_hash.keys.length == 3 && dice_hash.keys.none? {|key| dice_hash[key] != 2}
       points = 500
-    elsif dice_hash.keys == [1,2,3,4,5] || dice_hash.keys == [2,3,4,5,6]
-      points = 1000
+    elsif dice_hash.keys.length == 5
+      points = 1000 if dice_hash.keys.min == 1 && dice_hash.keys.max == 5
+      points = 1000 if dice_hash.keys.min == 2 && dice_hash.keys.max == 6
+      points += 100 if dice_hash[1] == 2
+      points += 50 if dice_hash[5] == 2
     elsif dice_hash.keys.length == 6
       points = 1500
     end

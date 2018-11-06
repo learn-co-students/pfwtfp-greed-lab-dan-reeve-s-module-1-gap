@@ -1,11 +1,14 @@
 require 'pry'
-require_relative './message.rb'
+
+require_relative 'message'
+require_relative 'player'
+require_relative 'dice_roll'
 
 class Greed
-  attr_accessor :players, :player_count
+  attr_accessor :players, :player_count, :current_player, :current_roll, :current_roll_points, :saved_dice_roll_array, :saved_dice_points
 
   def initialize
-    @players = []
+    self.players = []
   end
 
   def start_game
@@ -15,103 +18,111 @@ class Greed
   end
 
   def setup_game
-    loop do
-      Message.number_of_players
-      self.player_count = get_input
-      break if (2..6).include? self.player_count
-      Message.invalid_entry
-    end
 
-    self.player_count.times do |i|
-      self.players << Player.new("Player #{i+1}")
+    Message.number_of_players
+    self.player_count = get_input
+    if (2..6).include? self.player_count
+
+      self.player_count.times do |i|
+        self.players << Player.new("Player #{i+1}")
+      end
+
+      play_game
+    else
+      Message.invalid_entry
+      setup_game
     end
-    play_game
   end
 
   def play_game
-    loop do
-      @players.each_with_index {|player|
-        turn_over = false
-        while turn_over == false do
-          turn_over = take_turn(player)
-          exit if winner?
-        end
-      }
-    end
+
+    self.players.each_with_index {|player|
+      self.current_player = player
+      self.saved_dice_roll_array = []
+      take_turn
+      return if winner?
+    }
+    winner = self.players.sort {|player| player.score}.first
+    Message.winner(winner)
+    play_game
   end
 
 
-  def take_turn(player)
-    Message.current_scores(@players)
-    Message.new_roll(player)
-    saved_dice_array = []
-    roll(player, saved_dice_array)
-  end
+  def take_turn
+    Message.current_scores(self.players)
+    Message.current_player_turn(self.current_player)
 
-  def roll(player, saved_dice_array)
-    dice_array = roll_dice(6 - saved_dice_array.flatten.length)
-    points = calculate_points(dice_array)
-    if points == 0
+    # roll dice
+    self.current_roll = DiceRoll.new(6 - self.saved_dice_roll_array.flatten.length)
 
-      Message.current_scores(@players)
+    # calculate point value of roll
+    self.current_roll_points = calculate_points(self.current_roll.generate_set)
+    self.saved_dice_points = self.saved_dice_roll_array.reduce(0) {|sum, roll| sum += calculate_points(roll)}
+
+    Message.saved_dice(self.saved_dice_roll_array, self.saved_dice_points)
+    Message.roll_results(self.current_player, self.current_roll.generate_set, self.current_roll_points)
+
+    # if @roll_points == 0, display Greed message and end turn, else display results
+    if self.current_roll_points == 0
       Message.greed
-      Message.roll_results(player, dice_array, points)
-      Message.end_turn(player, points)
-      get_input
-      return true
+      end_turn(0)
     else
-      loop do
-        existing_points = 0
-        saved_dice_array.each { |array|
-          existing_points += calculate_points(array)
-        }
-        Message.current_scores(@players)
-        Message.new_roll(player)
-        Message.saved_dice(saved_dice_array, existing_points)
-        Message.roll_results(player, dice_array, points)
-        Message.roll_options(points, existing_points)
-
-        choice = get_input
-
-        case choice
-        when 1
-          player.score += points+existing_points
-          Message.end_turn(player, points+existing_points)
-          get_input
-          return true
-        when 2
-          Message.roll_again
-          saved_dice_array = []
-          return roll(player, saved_dice_array)
-        when 3
-          ready = false
-          new_dice_array = []
-          while ready == false
-            Message.current_scores(@players)
-            Message.saved_dice(new_dice_array, calculate_points(new_dice_array))
-            Message.select_reroll_dice(dice_array)
-
-            choice = get_input
-
-            if (1..dice_array.length).include? choice
-              new_dice_array.push(dice_array.slice!(choice-1, 1).first)
-            else
-              ready = true
-            end
-          end
-          saved_dice_array.push(new_dice_array) if new_dice_array.length > 0
-          Message.roll_again
-          return roll(player, saved_dice_array)
-        else
-          Message.invalid_entry
-        end
-      end
+      Message.roll_options(self.current_roll_points + self.saved_dice_points)
+      get_player_choice
     end
   end
 
-  def calculate_points(dice_array)
+  def end_turn(points)
+    # display current_scores, roll_results and end_turn from Message
+    self.current_player.score += points
+    Message.end_turn(self.current_player, points)
+    get_input
+  end
+
+  def get_player_choice
+    choice = get_input
+    case choice
+    when 1
+      points_from_saved_dice = self.saved_dice_roll_array.reduce(0) {|sum, roll| sum += calculate_points(roll)}
+      total_points = self.current_roll_points + self.saved_dice_points
+      end_turn(total_points)
+    when 2
+      take_turn
+    when 3
+      save_dice_and_reroll
+    else
+      Message.invalid_entry
+      get_player_choice
+    end
+  end
+
+
+  def save_dice_and_reroll(new_dice_array = [])
+
+    temporary_dice_display = self.saved_dice_roll_array + [new_dice_array]
+    temporary_points = temporary_dice_display.reduce(0) {|sum, roll| sum += calculate_points(roll)}
+
+    Message.current_scores(self.players)
+    Message.saved_dice(temporary_dice_display, temporary_points)
+    Message.select_reroll_dice(self.current_roll.generate_set)
+
+    choice = get_input
+    if (1..self.current_roll.dice.length).include? choice
+
+      new_dice_array.push(self.current_roll.dice.delete_at(choice-1).roll)
+      save_dice_and_reroll(new_dice_array)
+
+    else
+      self.saved_dice_roll_array.push(new_dice_array) if !new_dice_array.empty?
+      take_turn
+    end
+  end
+
+  def calculate_points(dice_roll)
     points = 0
-    dice_hash = dice_array.each_with_object(Hash.new(0)) { |die, acc| acc[die] += 1 }
+
+    dice_hash = dice_roll.each_with_object(Hash.new(0)) { |die, acc| acc[die] += 1 }
+
     dice_hash.keys.each {|key|
       case dice_hash[key]
       when 1..2
@@ -158,16 +169,7 @@ class Greed
   end
 
   def winner?
-    !!@players.find {|player| player.score >= 10000}
-  end
-
-
-  def roll_dice(number)
-    Array.new(number) { roll_die }
-  end
-
-  def roll_die
-    rand(6)+1
+    !!self.players.find {|player| player.score >= 10000}
   end
 
   def get_input

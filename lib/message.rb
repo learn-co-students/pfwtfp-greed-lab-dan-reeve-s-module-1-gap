@@ -21,14 +21,14 @@ def self.current_scores(players)
   puts "Current Scores"
   puts "--------------"
   players.each {|player|
-    puts "#{player.name}: #{player.score}"
+    puts "#{player.id}: #{player.score}"
   }
   puts ""
 end
 
-def self.new_roll(player)
+def self.current_player_turn(player)
   puts ""
-  puts "#{player.name}'s turn:"
+  puts "#{player.id}'s turn:"
   puts ""
 end
 
@@ -37,24 +37,23 @@ def self.saved_dice(saved_dice_array, points)
 end
 
 def self.roll_results(player, dice_array, points)
-  puts "#{player.name}, you rolled: #{dice_array}. You have #{points} points."
+  puts "#{player.id}, you rolled: #{dice_array}. You have #{points} points."
   puts ""
 end
 
-def self.roll_options(points, existing_points)
+def self.roll_options(total_points)
   puts ""
   puts "What would you like to do?"
   puts ""
-  puts "1) End Turn and receive #{points + existing_points} points"
+  puts "1) End Turn and receive #{total_points} points"
   puts "2) Re-Roll All Dice"
   puts "3) Re-Roll Some Dice"
   puts ""
   print "Choice: "
 end
 
-def self.roll_again
-  puts "Re-rolling..."
-  puts ""
+def self.winner(player)
+  puts "Player #{player.id} has won!"
 end
 
 def self.select_reroll_dice(dice_array)
@@ -80,7 +79,7 @@ end
 
 def self.end_turn(player, points)
   puts ""
-  puts "The turn has ended. #{player.name} receives #{points} points."
+  puts "The turn has ended. #{player.id} receives #{points} points."
   puts "Press Enter to continue"
 end
 

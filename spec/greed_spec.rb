@@ -91,8 +91,16 @@ describe 'Greed' do
   end
 
   describe 'start_game' do
+    original_stdout = $stdout
+    greed = Greed.new(test_mode: true)
 
-    greed = Greed.new()
+    before(:all) do
+       $stdout = File.open(File::NULL, "w")
+    end
+
+    after(:all) do
+      $stdout = original_stdout
+    end
 
     it "exists" do
       expect(greed).to respond_to(:start_game)

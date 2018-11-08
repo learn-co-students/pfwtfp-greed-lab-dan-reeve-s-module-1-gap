@@ -48,10 +48,10 @@ describe 'Greed' do
     end
   end
 
-  describe 'winner?' do
+  describe 'someone_won?' do
     it "exists" do
       greed = Greed.new()
-      expect(greed).to respond_to(:winner?)
+      expect(greed).to respond_to(:someone_won?)
     end
 
     it "returns `true` if a player has 10000 points or more" do
@@ -61,7 +61,7 @@ describe 'Greed' do
       player2 = Player.new(2)
       player2.instance_variable_set(:@score, 10000)
       greed.instance_variable_set(:@players, [player1, player2])
-      expect(greed.winner?).to eq(true)
+      expect(greed.someone_won?).to eq(true)
     end
 
     it "returns `false` if no player has 10000 points or more" do
@@ -72,7 +72,7 @@ describe 'Greed' do
       player2 = Player.new(2)
       player2.instance_variable_set(:@score, 9000)
       greed.instance_variable_set(:@players, [player1, player2])
-      expect(greed.winner?).to eq(false)
+      expect(greed.someone_won?).to eq(false)
     end
 
   end

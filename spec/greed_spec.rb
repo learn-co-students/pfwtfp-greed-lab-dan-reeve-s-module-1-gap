@@ -77,16 +77,16 @@ describe 'Greed' do
 
   end
 
-  describe 'get_input' do
+  describe 'read_integer' do
     it "exists" do
       greed = Greed.new()
-      expect(greed).to respond_to(:get_input)
+      expect(greed).to respond_to(:read_integer)
     end
 
     it "receives user input and converts to integer" do
       greed = Greed.new()
       allow(greed).to receive(:gets) { "5" }
-      expect(greed.get_input).to eq(5)
+      expect(greed.read_integer).to eq(5)
     end
   end
 
@@ -108,8 +108,7 @@ describe 'Greed' do
 
     it "calls `Message.welcome`" do
       allow_any_instance_of(Object).to receive(:puts) { "" }
-      allow(greed).to receive(:get_input) { 2 }
-      allow(greed).to receive(:setup_game) { nil }
+      allow(greed).to receive(:read_integer) { 2 }
 
       expect(Message).to receive(:welcome)
       greed.start_game

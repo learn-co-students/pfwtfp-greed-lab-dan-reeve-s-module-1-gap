@@ -7,6 +7,5 @@ require 'greedy_roller'
 require 'greed'
 require 'player'
 
-greed = Greed.new()
 
-greed.start_game
+Greed.new().start_game

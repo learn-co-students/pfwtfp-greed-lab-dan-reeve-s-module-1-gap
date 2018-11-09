@@ -1,9 +1,11 @@
-require_relative '../lib/die.rb'
-require_relative '../lib/dice_roll.rb'
-require_relative '../lib/greed.rb'
-require_relative '../lib/player.rb'
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+
+require 'die'
+require 'dice_roll'
+require 'greedy_roller'
+require 'greed'
+require 'player'
 
 
-greed = Greed.new()
-
-greed.start_game
+Greed.new().start_game

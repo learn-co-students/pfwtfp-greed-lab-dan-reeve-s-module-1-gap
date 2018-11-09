@@ -32,12 +32,12 @@ def self.current_player_turn(player)
   puts ""
 end
 
-def self.saved_dice(saved_dice_array, points)
-  puts "Saved dice: #{saved_dice_array} | Total points: #{points}"
+def self.saved_dice(roll)
+  puts "Saved dice: #{roll.dice_values} | Total points: #{roll.points}"
 end
 
-def self.roll_results(player, dice_array, points)
-  puts "#{player.id}, you rolled: #{dice_array}. You have #{points} points."
+def self.roll_results(player, r)
+  puts "#{player.id}, you rolled: #{r.dice_values}. You have #{r.points} points."
   puts ""
 end
 

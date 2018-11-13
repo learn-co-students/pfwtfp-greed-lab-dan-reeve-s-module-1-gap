@@ -202,30 +202,5 @@ describe 'Greed' do
       greed.play(greed.instance_variable_get(:@players))
     end
 
-
-
-    #
-    # before do
-    #   allow(greed).to receive(:someone_won?).and_return(false, false, true)
-    # end
-    #
-    # it 'calls take_turn' do
-    #
-    # end
-    # it 'displays "Player 1 wins!" if the first player instance has over 10000' do
-    #   greed.instance_variable_set(:@players, Array.new(2){ |i| Player.new("Player #{i+1}") })
-    #
-    #   allow(greed).to receive(:take_turn)
-    #   expect(greed).to receive(:take_turn).twice
-    #
-    #   greed = Greed.new()
-    #   player1 = Player.new("Player 1")
-    #
-    #
-    #   player2.instance_variable_set(:@score, 12000)
-    #   greed.instance_variable_set(:@players, [player1, player2])
-    #
-    #   # greed.play(greed.instance_variable_get(:@players))
-    # end
   end
 end

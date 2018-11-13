@@ -6,10 +6,11 @@ require_relative 'dice_roll'
 require_relative 'greedy_roller'
 
 class Greed
+
   attr_accessor :players
 
-  def initialize(opts={})
-    @opts = opts
+  def initialize()
+    # @opts = opts
   end
 
   def start_game
@@ -25,9 +26,8 @@ class Greed
 
     @players = Array.new(player_count){ |i| Player.new("Player #{i+1}") }
 
-    if !@opts[:test_mode]
-      play(players)
-    end
+    play(@players)
+
   end
 
   def prompt_player_count
@@ -47,7 +47,7 @@ class Greed
         break if someone_won?
       end
     end
-    puts "#{winner_name.id} wins!"
+    puts "#{winner.id} wins!"
   end
 
   def display_scores(players)
@@ -105,12 +105,12 @@ class Greed
     read_integer
   end
 
-  def winner_name
-    players.find {|player| player.score >= 10000}
+  def winner
+    @players.find {|player| player.score >= 10000}
   end
 
   def someone_won?
-    !!winner_name
+    !!winner
   end
 
   def read_integer
